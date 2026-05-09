@@ -41,7 +41,7 @@ export const LetterName = ({ palette }: any) => (
       <Signoff palette={palette} top="永远爱你的 ——" name="爸爸 & 妈妈" />
     </div>
 
-    <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/1.png"
+    <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/static/1.png"
       rows={[["collected", "2019"], ["now", "七岁 · seven"], ["height", "still growing ↑"]]} />
 
     <WaxSeal palette={palette} />

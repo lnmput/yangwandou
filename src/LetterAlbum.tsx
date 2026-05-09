@@ -34,7 +34,7 @@ export const LetterAlbum = ({ palette }: any) => (
         lineHeight: "2.2",
         textTransform: "uppercase",
       }}>
-        a. 出生 · 2019<br />
+        a. 出生 · 2018<br />
         b. 第一步 · 2020<br />
         c. 第一句话 · 2021<br />
         d. 上幼儿园 · 2022<br />

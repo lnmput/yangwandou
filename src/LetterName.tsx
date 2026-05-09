@@ -42,7 +42,7 @@ export const LetterName = ({ palette }: any) => (
     </div>
 
     <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/static/1.png"
-      rows={[["collected", "2019"], ["now", "七岁 · seven"], ["height", "still growing ↑"]]} />
+      rows={[["collected", "2018"], ["now", "七岁 · seven"], ["height", "still growing ↑"]]} />
 
     <WaxSeal palette={palette} />
   </LetterShell>

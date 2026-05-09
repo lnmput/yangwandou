@@ -20,7 +20,7 @@ export const LetterSeven = ({ palette }: any) => (
       </div>
 
       <p style={paraS(palette)}>
-        七年前的春天,我们把一颗豌豆种进了心里。<br />
+        七年前,我们把一颗豌豆种进了心里。<br />
         现在,她长成了一个会笑的小人 ——<br />
         会跑、会跳、会画画、会自己系鞋带,<br />
         还会突然抱住我们说「我爱你」。

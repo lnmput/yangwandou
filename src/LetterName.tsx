@@ -35,7 +35,7 @@ export const LetterName = ({ palette }: any) => (
       <p style={paraS(palette)}>
         我们给你这个名字,是希望你像豌豆一样 ——<br />
         圆圆的,甜甜的,藏在小小的房子里,<br />
-        有一天会发芽,会开花,会结出饱满的小小豌豆。
+        会发芽,会开花,也会结出饱满的小小豌豆。
       </p>
 
       <Signoff palette={palette} top="永远爱你的 ——" name="爸爸 & 妈妈" />

@@ -37,7 +37,7 @@ export const Petals = ({ palette, count = 18 }: { palette: any; count?: number }
   </>
 );
 
-export const LetterShell = ({ palette, headerR, children, footer = "a small letter, kept forever" }: any) => {
+export const LetterShell = ({ palette, children, footer = "a small letter, kept forever" }: any) => {
   return (
     <div style={{
       position: "relative",
@@ -72,13 +72,6 @@ export const LetterShell = ({ palette, headerR, children, footer = "a small lett
           <span style={{ color: palette.petal, fontSize: "16px" }}>❀</span>
           <span>yangwandou.com</span>
         </div>
-        <div style={{
-          fontFamily: "var(--f-en-serif)",
-          fontStyle: "italic",
-          fontSize: "13px",
-          textTransform: "none",
-          letterSpacing: "0.1em",
-        }}>{headerR}</div>
       </div>
 
       {children}

@@ -2,8 +2,8 @@ import { jsx } from 'hono/jsx'
 import { LetterShell, Signoff } from './components'
 import { paraS } from './theme'
 
-export const LetterAlbum = ({ palette }: any) => (
-  <LetterShell palette={palette} headerR="letter № 03 · pages from seven years" footer="seven years, seven moments">
+export const LetterAlbum = ({ palette, ageInfo }: any) => (
+  <LetterShell palette={palette} headerR={`letter № 03 · pages from ${ageInfo.age} years`} footer={`${ageInfo.age} years, seven moments`}>
     <div style={{ position: "absolute", left: "110px", top: "140px", width: "320px" }}>
       <div style={{
         fontFamily: "var(--f-en-display)",
@@ -40,7 +40,7 @@ export const LetterAlbum = ({ palette }: any) => (
         d. 上幼儿园 · 2022<br />
         e. 第一颗牙 · 2024<br />
         f. 上小学 · 2025<br />
-        g. 七岁的今天 · 2026
+        g. {ageInfo.cnAge}岁的今天 · {ageInfo.currentYear}
       </div>
 
       <Signoff palette={palette} top="永远翻给你看 ——" name="爸爸 & 妈妈" />
@@ -56,7 +56,7 @@ export const LetterAlbum = ({ palette }: any) => (
         { x: 30, y: 290, w: 220, h: 180, r: 1.5, label: "d · 上幼儿园" },
         { x: 280, y: 270, w: 160, h: 200, r: -1, label: "e · 第一颗牙" },
         { x: 470, y: 310, w: 200, h: 230, r: 2.5, label: "f · 上小学" },
-        { x: 130, y: 510, w: 240, h: 130, r: -1.5, label: "g · 七岁的今天", accent: true },
+        { x: 130, y: 510, w: 240, h: 130, r: -1.5, label: `g · ${ageInfo.cnAge}岁的今天`, accent: true },
       ].map((p, i) => (
         <div key={i} style={{
           position: "absolute",

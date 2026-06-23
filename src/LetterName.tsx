@@ -2,7 +2,7 @@ import { jsx } from 'hono/jsx'
 import { LetterShell, WaxSeal, Signoff, SpecimenCard } from './components'
 import { paraS, paraEnS } from './theme'
 
-export const LetterName = ({ palette }: any) => (
+export const LetterName = ({ palette, ageInfo }: any) => (
   <LetterShell palette={palette} headerR="letter № 01 · spring, MMXIX" footer="on the day we named you">
     <div style={{ position: "absolute", left: "110px", top: "130px", width: "720px" }}>
       <div style={{
@@ -42,8 +42,8 @@ export const LetterName = ({ palette }: any) => (
     </div>
 
     <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/static/1.png"
-      rows={[["collected", "2018"], ["now", "七岁 · seven"], ["height", "still growing ↑"]]} />
+      rows={[["collected", String(ageInfo.birthYear)], ["now", `${ageInfo.cnAge}岁 · ${ageInfo.age}`], ["height", "still growing ↑"]]} />
 
-    <WaxSeal palette={palette} />
+    <WaxSeal palette={palette} x={60} y={162} rot={-8} />
   </LetterShell>
 );

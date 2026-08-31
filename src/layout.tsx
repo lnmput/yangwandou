@@ -2,13 +2,14 @@ import { jsxRenderer } from 'hono/jsx-renderer'
 
 export const Layout = jsxRenderer(({ children }) => {
   return (
-    <html lang="zh">
+    <html lang="zh-CN">
       <head>
         <meta charset="utf-8" />
-        <title>杨豌豆 · yangwandou.com</title>
+        <title>杨豌豆 · 画册</title>
         <meta name="description" content="杨豌豆的成长信件录" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23a89cc4%22>❀</text></svg>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/static/style.css" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />

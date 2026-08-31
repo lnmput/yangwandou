@@ -9,7 +9,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "hono": "^4.12.18"
+    "hono": "^4.12.18",
+    "page-flip": "^2.0.7"
   },
   "devDependencies": {
     "@hono/vite-build": "^1.2.0",

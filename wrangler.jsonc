@@ -5,6 +5,12 @@
   "pages_build_output_dir": "./dist",
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ARTBOOK_BUCKET",
+      "bucket_name": "yangwandou-artbook"
+    }
   ]
   // "vars": {
   //   "MY_VAR": "my-variable"

@@ -11,6 +11,9 @@ importers:
       hono:
         specifier: ^4.12.18
         version: 4.12.18
+      page-flip:
+        specifier: ^2.0.7
+        version: 2.0.7
     devDependencies:
       '@hono/vite-build':
         specifier: ^1.2.0
@@ -800,6 +803,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  page-flip@2.0.7:
+    resolution: {integrity: sha512-96lQFUUz7r/LZzEUZJ3yBIMEKU9+m8HMFDzTvTdD6P7Ag/wXINjp9n0W7b4wanwnDbQETo4uNUoL3zMqpFxwGA==}
+
   path-to-regexp@6.3.0:
     resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
 
@@ -1431,6 +1437,8 @@ snapshots:
       brace-expansion: 2.1.0
 
   nanoid@3.3.12: {}
+
+  page-flip@2.0.7: {}
 
   path-to-regexp@6.3.0: {}
 

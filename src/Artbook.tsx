@@ -26,14 +26,14 @@ const TitlePage = ({ artbook }: { artbook: ArtbookData }) => (
     </svg>
 
     <div class="title-card">
-      <div class="title-kicker"><span>01</span> MY LITTLE ART BOOK</div>
+      <div class="title-kicker"><span>01</span> THE ARTBOOK OF YANGWANDOU</div>
       <div class="title-eyebrow">我的第一本</div>
       <h1 aria-label={artbook.title}>
         {Array.from(artbook.title).map((character, index) => (
           <span key={`${character}-${index}`} aria-hidden="true">{character}</span>
         ))}
       </h1>
-      <p>{artbook.description}</p>
+      <p>一个女孩眼里闪闪发光的世界</p>
       <i class="title-crayon-line" aria-hidden="true" />
     </div>
 
@@ -41,7 +41,7 @@ const TitlePage = ({ artbook }: { artbook: ArtbookData }) => (
       <small>DRAWINGS FROM</small>
       <strong>{artbook.years}</strong>
     </div>
-    <div class="title-signature">WANDOU · 画着长大</div>
+    <div class="title-signature">❀ 爸爸妈妈收集整理</div>
   </div>
 )
 
@@ -142,16 +142,7 @@ export const Artbook = ({ artbook }: { artbook: ArtbookData }) => {
             {/* Slide 1: Title Page */}
             <div class="mobile-slide">
               <div class="mobile-card mobile-paper-card mobile-title-card">
-                <div class="m-title-inner">
-                  <span class="m-title-eyebrow">THE ARTBOOK OF YANGWANDOU</span>
-                  <h1 class="m-title-h1">杨豌豆的画册</h1>
-                  <p class="m-title-p">一个女孩眼里闪闪发光的世界</p>
-                  <div class="m-title-stamp">
-                    <span>DRAWINGS FROM</span>
-                    <strong>{artbook.years}</strong>
-                  </div>
-                  <div class="m-title-sig">❀ 爸爸妈妈收集整理</div>
-                </div>
+                <TitlePage artbook={artbook} />
               </div>
             </div>
 

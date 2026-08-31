@@ -356,7 +356,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 
 @media (max-width: 768px) {
   .artbook-topbar {
-    padding: 14px 18px;
+    display: none;
   }
   .artbook-edition {
     display: none;
@@ -369,9 +369,10 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
     flex-direction: column;
     align-items: center;
     width: 100%;
-    min-height: calc(100vh - 56px);
-    min-height: calc(100dvh - 56px);
-    padding: 6px 14px 24px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0;
     box-sizing: border-box;
   }
 }
@@ -452,8 +453,44 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 24px;
+  container-type: inline-size;
+  padding: 0;
 }
+.mobile-title-card .title-leaf {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  flex: none;
+}
+.mobile-title-card .title-card {
+  top: 25.78%;
+  left: 11.48%;
+  width: 81.11%;
+  min-height: 41.18%;
+  padding: 6.3% 6.3% 5.74%;
+}
+.mobile-title-card .title-card::before {
+  top: -1.48%;
+  left: 26.85%;
+  width: 21.85%;
+  height: 4.44%;
+}
+.mobile-title-card .title-kicker { gap: 1.85cqw; font-size: 2.04cqw; }
+.mobile-title-card .title-kicker span { width: 5.19cqw; height: 5.19cqw; border-width: max(1px, .37cqw); }
+.mobile-title-card .title-eyebrow { margin: 4.07cqw 0 .93cqw; font-size: 3.33cqw; }
+.mobile-title-card .title-leaf h1 { margin: 1.11cqw 0 2.41cqw -.74cqw; font-size: 11.11cqw; }
+.mobile-title-card .title-card p { font-size: 2.96cqw; }
+.mobile-title-card .title-crayon-line { width: 30.37cqw; height: 1.3cqw; margin-top: 1.85cqw; }
+.mobile-title-card .title-year-stamp {
+  right: 7.78%;
+  bottom: 12.44%;
+  padding: 2.04cqw 2.78cqw 1.67cqw;
+  border-width: max(1px, .37cqw);
+}
+.mobile-title-card .title-year-stamp small { font-size: 1.67cqw; }
+.mobile-title-card .title-year-stamp strong { margin-top: .93cqw; font-size: 4.07cqw; }
+.mobile-title-card .title-signature { left: 20.56%; bottom: 5.63%; font-size: 2.41cqw; }
+.mobile-title-card .title-doodles { width: 100%; height: 100%; }
 .m-title-inner {
   text-align: center;
   display: flex;
@@ -632,6 +669,20 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   background: transparent;
   cursor: pointer;
   font: inherit;
+}
+
+@media (max-width: 768px) {
+  .mobile-book-container {
+    max-width: none;
+    height: 100%;
+  }
+  .mobile-slider-viewport,
+  .mobile-slider-track,
+  .mobile-slide {
+    height: 100%;
+  }
+  .mobile-controls,
+  .mobile-keyhint { display: none; }
 }
 
 /* Artbook upload */

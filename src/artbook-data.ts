@@ -37,6 +37,10 @@ export type R2ObjectInfo = {
 
 export type R2BucketBinding = {
   get: (key: string) => Promise<R2ObjectInfo | null>
+  put: (key: string, value: ReadableStream<Uint8Array> | ArrayBuffer | string | Blob, options?: {
+    httpMetadata?: R2HttpMetadata
+    customMetadata?: Record<string, string>
+  }) => Promise<R2ObjectInfo>
   list: (options?: {
     prefix?: string
     cursor?: string
@@ -65,6 +69,7 @@ type ArtbookManifest = {
 
 export type CloudflareBindings = {
   ARTBOOK_BUCKET?: R2BucketBinding
+  UPLOAD_PASSWORD?: string
 }
 
 const fallbackArtbook: ArtbookData = {
@@ -143,6 +148,16 @@ const listImages = async (bucket: R2BucketBinding) => {
   } while (cursor)
 
   return objects.sort((a, b) => a.key.localeCompare(b.key, 'zh-CN', { numeric: true }))
+}
+
+export const getNextArtworkNumber = async (bucket: R2BucketBinding) => {
+  const images = await listImages(bucket)
+  const highest = images.reduce((max, object) => {
+    const filename = decodeObjectKey(object.key).split('/').pop() ?? ''
+    const match = filename.match(/^(\d+)/)
+    return match ? Math.max(max, Number(match[1])) : max
+  }, 0)
+  return highest + 1
 }
 
 export const loadArtbook = async (bucket?: R2BucketBinding): Promise<ArtbookData> => {

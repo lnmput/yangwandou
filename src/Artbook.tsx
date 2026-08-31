@@ -5,7 +5,11 @@ const TitlePage = ({ artbook }: { artbook: ArtbookData }) => (
   <div class="title-leaf">
     <div class="title-icons" aria-hidden="true">🎨　✏️　🌱</div>
     <div class="title-eyebrow">我的第一本</div>
-    <h1>{artbook.title}</h1>
+    <h1 aria-label={artbook.title}>
+      {Array.from(artbook.title).map((character, index) => (
+        <span key={`${character}-${index}`} aria-hidden="true">{character}</span>
+      ))}
+    </h1>
     <div class="title-rule" />
     <div class="title-years">{artbook.years}</div>
     <p>{artbook.description}</p>

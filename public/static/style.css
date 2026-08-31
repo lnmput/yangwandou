@@ -7,6 +7,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   --paper: #f4efe3;
   --ink: #3e392f;
   --accent: #bd4939;
+  --f-cn-child: "ZCOOL KuaiLe", "LXGW WenKai", "Kaiti SC", cursive;
   position: relative;
   min-width: 1180px;
   min-height: 100vh;
@@ -129,7 +130,17 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 }
 .title-icons { margin-bottom: 26px; font-size: 24px; letter-spacing: .16em; }
 .title-eyebrow { color: #978e80; font-family: var(--f-cn-hand); font-size: 18px; letter-spacing: .32em; }
-.title-leaf h1 { margin: 22px 0 24px; color: var(--accent); font: 600 48px/1.15 var(--f-cn-hand); letter-spacing: .02em; }
+.title-leaf h1 {
+  margin: 22px 0 24px;
+  color: var(--accent);
+  font: 400 60px/1.08 var(--f-cn-child);
+  letter-spacing: .055em;
+}
+.title-leaf h1 span { display: inline-block; transform-origin: 50% 80%; }
+.title-leaf h1 span:nth-child(4n + 1) { transform: translateY(1px) rotate(-2deg); }
+.title-leaf h1 span:nth-child(4n + 2) { transform: translateY(-2px) rotate(1.4deg); }
+.title-leaf h1 span:nth-child(4n + 3) { transform: translateY(1px) rotate(-.8deg); }
+.title-leaf h1 span:nth-child(4n) { transform: translateY(-1px) rotate(2deg); }
 .title-rule { width: 112px; border-top: 2px dashed #d4c9b5; }
 .title-years { margin-top: 25px; color: #817a6e; font: 20px var(--f-en-serif); letter-spacing: .06em; }
 .title-leaf p { margin: 15px 0 0; color: #948c7f; font: 16px var(--f-cn-serif); letter-spacing: .04em; }

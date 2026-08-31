@@ -58,6 +58,6 @@ artbook/
 
 ```bash
 pnpm exec wrangler r2 bucket create yangwandou-artbook
-pnpm exec wrangler r2 object put "yangwandou-artbook/artbook/cover.jpg" --file ./cover.jpg
-pnpm exec wrangler r2 object put "yangwandou-artbook/artbook/001__2020.03__2岁__春天的第一颗种子.jpg" --file ./001.jpg
+pnpm exec wrangler r2 object put "yangwandou-artbook/artbook/cover.jpg" --file ./cover.jpg --remote
+pnpm exec wrangler r2 object put "yangwandou-artbook/artbook/001__2020.03__2岁__春天的第一颗种子.jpg" --file ./001.jpg --remote
 ```

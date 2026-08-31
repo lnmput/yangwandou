@@ -143,9 +143,38 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: rgba(255, 255, 255, .18);
+  isolation: isolate;
+  background: transparent;
 }
-.artwork-image img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; filter: saturate(.94) contrast(.98); }
+.artwork-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: .95;
+  mix-blend-mode: multiply;
+  filter: saturate(.9) contrast(.94) brightness(1.04) sepia(.025);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, #000 1.4%, #000 98.6%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 1.4%, #000 98.6%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 1.4%, #000 98.6%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 1.4%, #000 98.6%, transparent 100%);
+  mask-composite: intersect;
+}
+.artwork-image::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  opacity: .14;
+  background:
+    repeating-linear-gradient(90deg, rgba(72, 57, 38, .1) 0 1px, transparent 1px 5px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.28'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
 .artwork-sheet.without-caption .artwork-image { height: 88%; }
 .artwork-placeholder {
   display: block;

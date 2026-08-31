@@ -3,16 +3,45 @@ import type { ArtbookData, Artwork } from './artbook-data'
 
 const TitlePage = ({ artbook }: { artbook: ArtbookData }) => (
   <div class="title-leaf">
-    <div class="title-icons" aria-hidden="true">🎨　✏️　🌱</div>
-    <div class="title-eyebrow">我的第一本</div>
-    <h1 aria-label={artbook.title}>
-      {Array.from(artbook.title).map((character, index) => (
-        <span key={`${character}-${index}`} aria-hidden="true">{character}</span>
-      ))}
-    </h1>
-    <div class="title-rule" />
-    <div class="title-years">{artbook.years}</div>
-    <p>{artbook.description}</p>
+    <svg class="title-doodles" viewBox="0 0 540 675" preserveAspectRatio="none" aria-hidden="true">
+      <g class="doodle-sun" transform="translate(455 76) rotate(-8)">
+        <circle cx="0" cy="0" r="25" />
+        <path d="M0-42V-56M0 42v14M-42 0h-14M42 0h14M-30-30l-10-10M30 30l10 10M30-30l10-10M-30 30l-10 10" />
+      </g>
+      <path class="doodle-cloud" d="M292 82c18-19 41-9 44 8 13-11 34-2 31 14 18 0 25 10 18 19H278c-10-13-2-34 14-41Z" />
+      <path class="doodle-vine" d="M22 666c65-73 16-128 72-186 44-46 11-89 54-137 24-27 29-51 27-79" />
+      <g class="doodle-leaves">
+        <ellipse cx="59" cy="585" rx="28" ry="14" transform="rotate(-26 59 585)" />
+        <ellipse cx="86" cy="532" rx="27" ry="13" transform="rotate(25 86 532)" />
+        <ellipse cx="104" cy="459" rx="25" ry="12" transform="rotate(-27 104 459)" />
+        <ellipse cx="137" cy="392" rx="23" ry="11" transform="rotate(30 137 392)" />
+        <ellipse cx="151" cy="325" rx="21" ry="10" transform="rotate(-28 151 325)" />
+      </g>
+      <g class="doodle-peas" transform="translate(29 620) rotate(-26)">
+        <path d="M0 0c26-21 70-19 93 3-29 26-70 27-93-3Z" />
+        <circle cx="24" cy="1" r="7" /><circle cx="47" cy="0" r="7" /><circle cx="70" cy="1" r="7" />
+      </g>
+      <path class="doodle-squiggle" d="M355 580c18-17 25 18 43 1s26 18 44 0 27 17 45-2" />
+      <path class="doodle-star" d="m462 320 6 14 15 2-12 10 4 15-13-8-13 8 4-15-12-10 15-2Z" />
+    </svg>
+
+    <div class="title-card">
+      <div class="title-kicker"><span>01</span> MY LITTLE ART BOOK</div>
+      <div class="title-eyebrow">我的第一本</div>
+      <h1 aria-label={artbook.title}>
+        {Array.from(artbook.title).map((character, index) => (
+          <span key={`${character}-${index}`} aria-hidden="true">{character}</span>
+        ))}
+      </h1>
+      <p>{artbook.description}</p>
+      <i class="title-crayon-line" aria-hidden="true" />
+    </div>
+
+    <div class="title-year-stamp">
+      <small>DRAWINGS FROM</small>
+      <strong>{artbook.years}</strong>
+    </div>
+    <div class="title-signature">WANDOU · 画着长大</div>
   </div>
 )
 

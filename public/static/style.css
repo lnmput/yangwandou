@@ -121,29 +121,123 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .title-leaf {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  color: #52483b;
+}
+.title-doodles { position: absolute; inset: 0; width: 100%; height: 100%; }
+.doodle-sun circle { fill: #f7c84c; stroke: #e08c32; stroke-width: 5; }
+.doodle-sun path { fill: none; stroke: #e08c32; stroke-width: 6; stroke-linecap: round; }
+.doodle-cloud { fill: none; stroke: #70b9c2; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; opacity: .72; }
+.doodle-vine { fill: none; stroke: #57994e; stroke-width: 7; stroke-linecap: round; }
+.doodle-leaves { fill: #79ac55; stroke: #4f9149; stroke-width: 2.5; }
+.doodle-peas path { fill: #98be5d; stroke: #4f9149; stroke-width: 4; }
+.doodle-peas circle { fill: #d5df78; stroke: #6e9f4f; stroke-width: 2; }
+.doodle-squiggle { fill: none; stroke: #5ca8b4; stroke-width: 4; stroke-linecap: round; opacity: .8; }
+.doodle-star { fill: #ee7c76; stroke: #ce5f5b; stroke-width: 3; stroke-linejoin: round; transform-origin: 462px 340px; transform: rotate(8deg); }
+
+.title-card {
+  position: absolute;
+  z-index: 1;
+  top: 174px;
+  left: 62px;
+  width: 438px;
+  min-height: 278px;
+  padding: 34px 34px 31px;
+  background:
+    linear-gradient(92deg, rgba(255,255,255,.12), transparent 34% 68%, rgba(167,116,29,.07)),
+    #f3d66f;
+  box-shadow: 4px 7px 0 rgba(123, 91, 43, .12);
+  clip-path: polygon(1% 4%, 98% 0, 100% 95%, 3% 100%, 0 13%);
+  transform: rotate(-1.6deg);
+  text-align: left;
+}
+.title-card::before {
+  position: absolute;
+  top: -10px;
+  left: 144px;
+  width: 118px;
+  height: 30px;
+  content: "";
+  background: rgba(237, 147, 116, .58);
+  box-shadow: inset 0 0 0 1px rgba(161, 92, 71, .08);
+  transform: rotate(2.5deg);
+}
+.title-kicker {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 10%;
-  text-align: center;
+  gap: 10px;
+  color: #5b726f;
+  font: 600 11px/1 "JetBrains Mono", monospace;
+  letter-spacing: .14em;
 }
-.title-icons { margin-bottom: 26px; font-size: 24px; letter-spacing: .16em; }
-.title-eyebrow { color: #978e80; font-family: var(--f-cn-hand); font-size: 18px; letter-spacing: .32em; }
+.title-kicker span {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  letter-spacing: 0;
+  transform: rotate(-8deg);
+}
+.title-eyebrow {
+  margin: 22px 0 5px;
+  color: #6f6251;
+  font: 400 18px/1.2 "LXGW WenKai", "Kaiti SC", serif;
+  letter-spacing: .22em;
+}
 .title-leaf h1 {
-  margin: 22px 0 24px;
-  color: var(--accent);
-  font: 400 60px/1.08 var(--f-cn-child);
-  letter-spacing: .055em;
+  width: max-content;
+  max-width: 100%;
+  margin: 6px 0 13px -4px;
+  color: #bd4939;
+  font: 400 60px/1.05 var(--f-cn-child);
+  letter-spacing: .015em;
+  white-space: nowrap;
 }
 .title-leaf h1 span { display: inline-block; transform-origin: 50% 80%; }
-.title-leaf h1 span:nth-child(4n + 1) { transform: translateY(1px) rotate(-2deg); }
-.title-leaf h1 span:nth-child(4n + 2) { transform: translateY(-2px) rotate(1.4deg); }
-.title-leaf h1 span:nth-child(4n + 3) { transform: translateY(1px) rotate(-.8deg); }
-.title-leaf h1 span:nth-child(4n) { transform: translateY(-1px) rotate(2deg); }
-.title-rule { width: 112px; border-top: 2px dashed #d4c9b5; }
-.title-years { margin-top: 25px; color: #817a6e; font: 20px var(--f-en-serif); letter-spacing: .06em; }
-.title-leaf p { margin: 15px 0 0; color: #948c7f; font: 16px var(--f-cn-serif); letter-spacing: .04em; }
+.title-leaf h1 span:nth-child(4n + 1) { transform: translateY(2px) rotate(-2.4deg); }
+.title-leaf h1 span:nth-child(4n + 2) { transform: translateY(-3px) rotate(1.8deg); }
+.title-leaf h1 span:nth-child(4n + 3) { transform: translateY(2px) rotate(-1deg); }
+.title-leaf h1 span:nth-child(4n) { transform: translateY(-1px) rotate(2.4deg); }
+.title-card p {
+  margin: 0;
+  color: #675a49;
+  font: 400 16px/1.6 "LXGW WenKai", "Kaiti SC", serif;
+  letter-spacing: .04em;
+}
+.title-crayon-line {
+  display: block;
+  width: 164px;
+  height: 7px;
+  margin: 10px 0 0 2px;
+  background: repeating-linear-gradient(172deg, #dd7364 0 4px, #c95b50 4px 7px, transparent 7px 9px);
+  clip-path: polygon(0 34%, 100% 0, 98% 70%, 2% 100%);
+  opacity: .74;
+}
+.title-year-stamp {
+  position: absolute;
+  right: 42px;
+  bottom: 84px;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  padding: 11px 15px 9px;
+  border: 2px solid rgba(95, 112, 102, .62);
+  color: #64756d;
+  transform: rotate(-3deg);
+}
+.title-year-stamp small { font: 600 9px/1 "JetBrains Mono", monospace; letter-spacing: .15em; }
+.title-year-stamp strong { margin-top: 5px; font: 500 22px/1 "Cormorant Garamond", Georgia, serif; letter-spacing: .04em; }
+.title-signature {
+  position: absolute;
+  left: 111px;
+  bottom: 38px;
+  color: #8b7b68;
+  font: 400 13px/1 "LXGW WenKai", "Kaiti SC", serif;
+  letter-spacing: .12em;
+  transform: rotate(1.5deg);
+}
 
 .artwork-sheet { position: absolute; inset: 0; margin: 0; padding: 9% 9% 12%; }
 .artwork-image {

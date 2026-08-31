@@ -160,9 +160,71 @@ export const Artbook = ({ artbook }: { artbook: ArtbookData }) => {
           document.body.classList.toggle('artbook-is-open', page !== 0);
         };
 
+        let audioCtx = null;
+        let flipBuffer = null;
+        let fallbackAudio = null;
+
+        const getAudioContext = () => {
+          if (!audioCtx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) audioCtx = new AudioContextClass();
+          }
+          return audioCtx;
+        };
+
+        const loadFlipSound = async () => {
+          try {
+            const ctx = getAudioContext();
+            if (ctx && !flipBuffer) {
+              const res = await fetch('/static/audio/page-flip.mp3');
+              if (res.ok) {
+                const arr = await res.arrayBuffer();
+                flipBuffer = await ctx.decodeAudioData(arr);
+              }
+            }
+          } catch (e) {}
+          if (!fallbackAudio) {
+            fallbackAudio = new Audio('/static/audio/page-flip.mp3');
+            fallbackAudio.preload = 'auto';
+          }
+        };
+
+        const playFlipSound = () => {
+          const ctx = getAudioContext();
+          if (ctx) {
+            if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+            if (flipBuffer) {
+              try {
+                const src = ctx.createBufferSource();
+                src.buffer = flipBuffer;
+                const gain = ctx.createGain();
+                gain.gain.value = 0.8;
+                src.connect(gain);
+                gain.connect(ctx.destination);
+                src.start(0);
+                return;
+              } catch (e) {}
+            }
+          }
+          try {
+            const audio = (fallbackAudio && fallbackAudio.cloneNode()) || new Audio('/static/audio/page-flip.mp3');
+            audio.volume = 0.8;
+            audio.play().catch(() => {});
+          } catch (e) {}
+        };
+
+        loadFlipSound();
+        const unlock = () => {
+          const ctx = getAudioContext();
+          if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+        };
+        window.addEventListener('pointerdown', unlock, { once: true });
+        window.addEventListener('keydown', unlock, { once: true });
+
         pageFlip.on('init', (event) => syncControls(event.data.page));
         pageFlip.on('changeState', (event) => {
           if (event.data !== 'flipping') return;
+          playFlipSound();
           const page = pageFlip.getCurrentPageIndex();
           const direction = pageFlip.getFlipController().getCalculation()?.getDirection();
           if (page === 0 && direction === 0) document.body.classList.add('artbook-is-open');

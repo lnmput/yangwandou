@@ -69,7 +69,7 @@ export type CloudflareBindings = {
 
 const fallbackArtbook: ArtbookData = {
   title: '杨豌豆的画册',
-  years: '2020 — 2026',
+  years: '2018',
   description: '这里收藏了我画的每一幅画',
   coverSrc: '/static/artbook/cover-pea-sprout.png',
   artworks: [

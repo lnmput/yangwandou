@@ -42,7 +42,17 @@ export const ArtbookUpload = () => (
 
     <template id="upload-item-template">
       <article class="upload-item">
-        <div class="upload-preview"><img alt="待上传画作预览" /></div>
+        <div class="upload-preview">
+          <img alt="待上传画作预览" />
+          <div class="upload-rotate" aria-label="调整图片方向">
+            <button class="rotate-right" type="button" aria-label="顺时针旋转 90 度">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11a8 8 0 1 0-2.34 5.66" />
+                <path d="M20 4v7h-7" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <div class="upload-fields">
           <div class="upload-fileline"><strong class="upload-filename" /><span class="upload-state">等待上传</span></div>
           <label>作品标题 <input class="upload-title" type="text" maxlength="60" placeholder="可以留空，不显示说明" /></label>

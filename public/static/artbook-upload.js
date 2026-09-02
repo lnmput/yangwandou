@@ -65,8 +65,9 @@
     if (!file.size || file.size > maxBytes) return { error: `${file.name}：图片必须小于 30MB。` }
 
     const element = template.content.firstElementChild.cloneNode(true)
-    const item = { file, element, status: 'pending', previewUrl: URL.createObjectURL(file) }
-    element.querySelector('.upload-preview img').src = item.previewUrl
+    const item = { file, element, status: 'pending', rotation: 0, previewUrl: URL.createObjectURL(file) }
+    const preview = element.querySelector('.upload-preview img')
+    preview.src = item.previewUrl
     element.querySelector('.upload-filename').textContent = `${file.name} · ${formatSize(file.size)}`
     element.querySelector('.upload-remove').addEventListener('click', () => {
       if (uploading) return
@@ -76,6 +77,17 @@
       element.remove()
       updateSummary()
     })
+    element.querySelectorAll('.upload-rotate button').forEach((button) => button.addEventListener('click', () => {
+      if (uploading) return
+      item.rotation = (item.rotation + (button.classList.contains('rotate-left') ? -90 : 90) + 360) % 360
+      preview.style.transform = `rotate(${item.rotation}deg)`
+      if (item.status === 'error') {
+        item.status = 'pending'
+        setState(item, '等待上传')
+        setError(item)
+        updateSummary()
+      }
+    }))
     element.querySelectorAll('input').forEach((input) => input.addEventListener('input', () => {
       if (item.status === 'error') {
         item.status = 'pending'
@@ -101,9 +113,10 @@
     if (errors.length) window.alert(errors.join('\n'))
   })
 
-  const optimizeImage = async (file) => {
+  const optimizeImage = async (item) => {
+    const { file, rotation } = item
     const needsFormatConversion = !uploadTypes.has(file.type)
-    if (!needsFormatConversion && (!optimizeToggle.checked || file.size < optimizeAboveBytes || file.type === 'image/gif' || file.type === 'image/avif')) return file
+    if (!rotation && !needsFormatConversion && (!optimizeToggle.checked || file.size < optimizeAboveBytes || file.type === 'image/gif' || file.type === 'image/avif')) return file
     let bitmap
     try {
       bitmap = await createImageBitmap(file)
@@ -111,24 +124,29 @@
       throw new Error('当前浏览器无法读取这张照片，请在相机设置中选择“兼容性最佳”后重试。')
     }
     const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height))
-    if (!needsFormatConversion && scale === 1 && file.type === 'image/jpeg' && file.size < 5 * 1024 * 1024) {
+    if (!rotation && !needsFormatConversion && scale === 1 && file.type === 'image/jpeg' && file.size < 5 * 1024 * 1024) {
       bitmap.close()
       return file
     }
     const canvas = document.createElement('canvas')
-    canvas.width = Math.max(1, Math.round(bitmap.width * scale))
-    canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+    const width = Math.max(1, Math.round(bitmap.width * scale))
+    const height = Math.max(1, Math.round(bitmap.height * scale))
+    const swapsSides = rotation === 90 || rotation === 270
+    canvas.width = swapsSides ? height : width
+    canvas.height = swapsSides ? width : height
     const context = canvas.getContext('2d')
     context.fillStyle = '#fff'
     context.fillRect(0, 0, canvas.width, canvas.height)
-    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    context.translate(canvas.width / 2, canvas.height / 2)
+    context.rotate(rotation * Math.PI / 180)
+    context.drawImage(bitmap, -width / 2, -height / 2, width, height)
     bitmap.close()
     const blob = await new Promise((resolve, reject) => canvas.toBlob(
       (value) => value ? resolve(value) : reject(new Error('图片压缩失败。')),
       'image/jpeg',
       0.86,
     ))
-    if (blob.size >= file.size) return file
+    if (!rotation && blob.size >= file.size) return file
     return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })
   }
 
@@ -185,7 +203,7 @@
       setProgress(item, 5)
       updateSummary()
       try {
-        const optimized = await optimizeImage(item.file)
+        const optimized = await optimizeImage(item)
         setState(item, optimized === item.file ? '正在上传…' : `已优化为 ${formatSize(optimized.size)} · 上传中…`)
         const result = await send(item, optimized)
         item.status = 'done'
@@ -193,7 +211,7 @@
         setProgress(item, 100)
         setState(item, `已上传 · № ${result.no}`, 'success')
         item.element.classList.add('is-complete')
-        item.element.querySelectorAll('input, .upload-remove').forEach((control) => { control.disabled = true })
+        item.element.querySelectorAll('input, button').forEach((control) => { control.disabled = true })
       } catch (error) {
         item.status = 'error'
         setProgress(item, 0)

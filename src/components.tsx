@@ -138,7 +138,7 @@ export const Signoff = ({ palette, top, name }: any) => (
   </div>
 );
 
-export const SpecimenCard = ({ palette, title, sub, rows, img }: any) => (
+export const SpecimenCard = ({ palette, title, sub, rows, img, href }: any) => (
   <div style={{
     position: "absolute", right: "90px", top: "150px", width: "320px",
     background: palette.paperWhite,
@@ -148,7 +148,9 @@ export const SpecimenCard = ({ palette, title, sub, rows, img }: any) => (
     boxShadow: "0 30px 60px -30px rgba(0,0,0,0.25), 0 8px 20px -10px rgba(0,0,0,0.15)",
   }}>
     {img ? (
-      <img src={img} alt="photo" style={{ width: "100%", height: "360px", objectFit: "cover", display: "block" }} />
+      <a href={href} aria-label="打开画册" style={{ display: "block" }}>
+        <img src={img} alt="杨豌豆的画册封面" style={{ width: "100%", height: "360px", objectFit: "cover", display: "block" }} />
+      </a>
     ) : (
       <div class="photo-slot" style={{ width: "100%", height: "360px", color: palette.accent }}>
         <span class="photo-label">photo · 豌豆</span>

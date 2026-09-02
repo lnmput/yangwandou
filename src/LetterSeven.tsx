@@ -16,8 +16,8 @@ export const LetterSeven = ({ palette, ageInfo }: any) => {
     <LetterShell palette={palette} headerR={`letter № 02 · ${ageInfo.age}, ${ageInfo.currentYearRoman}`} footer={`for your ${ageInfo.enOrdinalAge} spring`}>
       <div style={{ position: "absolute", left: "110px", top: "130px", width: "720px" }}>
         <div style={{
-          fontFamily: "var(--f-en-display)",
-          fontSize: "64px", fontStyle: "italic",
+          fontFamily: "var(--f-en-hand)",
+          fontSize: "64px",
           color: palette.ink, lineHeight: "1.1", marginBottom: "6px",
         }}>
           On your <em style={{ color: palette.accent }}>{ageInfo.enOrdinalAge}</em> spring,
@@ -35,7 +35,7 @@ export const LetterSeven = ({ palette, ageInfo }: any) => {
           会跑、会跳、会画画、会自己系鞋带,<br />
           还会突然抱住我们说「我爱你」。
         </p>
-        <p style={paraEnS(palette)}>
+        <p style={{ ...paraEnS(palette), fontFamily: "var(--f-en-hand)", fontStyle: "normal" }}>
           {ageInfo.age} springs ago we planted a single pea. Today she runs, draws,
           ties her own shoelaces, and sometimes — without warning — wraps
           her arms around us and says <em>I love you</em>.
@@ -58,13 +58,13 @@ export const LetterSeven = ({ palette, ageInfo }: any) => {
         boxShadow: "0 30px 60px -30px rgba(0,0,0,0.25), 0 8px 20px -10px rgba(0,0,0,0.12)",
       }}>
         <div style={{
-          fontFamily: "var(--f-en-display)",
-          fontSize: "22px", color: palette.ink, fontStyle: "italic",
+          fontFamily: "var(--f-en-hand)",
+          fontSize: "22px", color: palette.ink,
         }}>Growth Chart</div>
         <div style={{
           fontFamily: "var(--f-cn-serif)", fontSize: "13px",
           color: palette.inkSoft, letterSpacing: "0.15em", marginTop: "4px",
-        }}>身高 记录 · age 0—{ageInfo.age}</div>
+        }}>身高 记录 · <span style={{ fontFamily: "var(--f-en-hand)" }}>age 0—{ageInfo.age}</span></div>
 
         <div style={{ height: "1px", background: palette.inkLine, margin: "12px 0" }} />
 
@@ -96,7 +96,7 @@ export const LetterSeven = ({ palette, ageInfo }: any) => {
           textAlign: "center",
           fontStyle: "italic",
         }}>
-          ↑ 还在长 · still growing
+          ↑ 还在长 · <span style={{ fontFamily: "var(--f-en-hand)", fontStyle: "normal" }}>still growing</span>
         </div>
       </div>
 

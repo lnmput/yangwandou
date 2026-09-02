@@ -6,8 +6,8 @@ export const LetterName = ({ palette, ageInfo }: any) => (
   <LetterShell palette={palette} headerR="letter № 01 · spring, MMXIX" footer="on the day we named you">
     <div style={{ position: "absolute", left: "110px", top: "130px", width: "720px" }}>
       <div style={{
-        fontFamily: "var(--f-en-display)",
-        fontSize: "78px", fontStyle: "italic",
+        fontFamily: "var(--f-en-hand)",
+        fontSize: "78px", fontStyle: "normal",
         color: palette.ink, lineHeight: "1.05", marginBottom: "8px",
       }}>
         Dear
@@ -27,7 +27,7 @@ export const LetterName = ({ palette, ageInfo }: any) => (
         奶奶说,豌豆开花的时候,
         <br />田垄上像落了一群浅紫色的蝴蝶。
       </p>
-      <p style={paraEnS(palette)}>
+      <p style={{ ...paraEnS(palette), fontFamily: "var(--f-en-hand)", fontStyle: "normal" }}>
         Your name is a tiny seed. When pea blossoms open in spring,
         the furrows look as if a hundred lavender butterflies have just landed.
       </p>
@@ -41,7 +41,7 @@ export const LetterName = ({ palette, ageInfo }: any) => (
       <Signoff palette={palette} top="永远爱你的 ——" name="爸爸 & 妈妈" />
     </div>
 
-    <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/static/1.png"
+    <SpecimenCard palette={palette} title="Pisum sativum" sub="杨豌豆 · garden pea" img="/static/1.png" href="/artbook"
       rows={[["collected", String(ageInfo.birthYear)], ["now", `${ageInfo.cnAge}岁 · ${ageInfo.age}`], ["height", "still growing ↑"]]} />
 
     <WaxSeal palette={palette} x={60} y={162} rot={-8} />

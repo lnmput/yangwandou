@@ -112,7 +112,6 @@ app.get('/', (c) => {
 
   return c.render(
     <div class="stack">
-      <a class="home-artbook-link" href="/artbook">打开画册 <span>→</span></a>
       <div class="letter-frame">
         <Wrap><LetterName palette={palette} ageInfo={ageInfo} /></Wrap>
       </div>

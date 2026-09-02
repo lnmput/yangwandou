@@ -1,13 +1,10 @@
-h1 { font-family: Arial, Helvetica, sans-serif; }
-.home-artbook-link { position: fixed; z-index: 5; top: 28px; right: 34px; color: #5a3a7a; font: 10px var(--f-en-mono); letter-spacing: .16em; text-decoration: none; text-transform: uppercase; transition: opacity .2s; }
-.home-artbook-link:hover { opacity: .55; }
-.home-artbook-link span { margin-left: 6px; font-size: 14px; }
+h1 { font-family: var(--f-child); }
 
 .artbook-page {
   --paper: #f4efe3;
   --ink: #3e392f;
   --accent: #bd4939;
-  --f-cn-child: "ZCOOL KuaiLe", "LXGW WenKai", "Kaiti SC", cursive;
+  --f-cn-child: var(--f-child);
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -15,7 +12,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   overflow-x: hidden;
   color: var(--ink);
   background: #f8f6f1;
-  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-family: var(--f-child);
 }
 @media (min-width: 1180px) {
   .artbook-page { min-width: 1180px; }
@@ -187,7 +184,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   align-items: center;
   gap: 10px;
   color: #5b726f;
-  font: 600 11px/1 "JetBrains Mono", monospace;
+  font: 600 11px/1 var(--f-child);
   letter-spacing: .14em;
 }
 .title-kicker span {
@@ -203,7 +200,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .title-eyebrow {
   margin: 22px 0 5px;
   color: #6f6251;
-  font: 400 18px/1.2 "LXGW WenKai", "Kaiti SC", serif;
+  font: 400 18px/1.2 var(--f-child);
   letter-spacing: .22em;
 }
 .title-leaf h1 {
@@ -223,7 +220,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .title-card p {
   margin: 0;
   color: #675a49;
-  font: 400 16px/1.6 "LXGW WenKai", "Kaiti SC", serif;
+  font: 400 16px/1.6 var(--f-child);
   letter-spacing: .04em;
 }
 .title-crayon-line {
@@ -247,14 +244,14 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
   color: #64756d;
   transform: rotate(-3deg);
 }
-.title-year-stamp small { font: 600 9px/1 "JetBrains Mono", monospace; letter-spacing: .15em; }
-.title-year-stamp strong { margin-top: 5px; font: 500 22px/1 "Cormorant Garamond", Georgia, serif; letter-spacing: .04em; }
+.title-year-stamp small { font: 600 9px/1 var(--f-child); letter-spacing: .15em; }
+.title-year-stamp strong { margin-top: 5px; font: 500 22px/1 var(--f-child); letter-spacing: .04em; }
 .title-signature {
   position: absolute;
   left: 111px;
   bottom: 38px;
   color: #8b7b68;
-  font: 400 13px/1 "LXGW WenKai", "Kaiti SC", serif;
+  font: 400 13px/1 var(--f-child);
   letter-spacing: .12em;
   transform: rotate(1.5deg);
 }
@@ -512,7 +509,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .m-title-p {
   margin: 0 0 24px;
   color: #6d6455;
-  font: 400 13px/1.6 "Songti SC", serif;
+  font: 400 13px/1.6 var(--f-child);
   letter-spacing: .06em;
 }
 .m-title-stamp {
@@ -571,7 +568,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .m-artwork-title {
   display: block;
   color: #2c251d;
-  font: 500 16px/1.3 "Songti SC", serif;
+  font: 500 16px/1.3 var(--f-child);
   letter-spacing: .04em;
 }
 .m-artwork-sub {
@@ -600,7 +597,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 }
 .m-back-mark {
   color: #8c8273;
-  font: 15px "Songti SC", serif;
+  font: 15px var(--f-child);
   letter-spacing: .12em;
 }
 .m-back-note {
@@ -695,15 +692,15 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .upload-shell { display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr); gap: clamp(40px, 7vw, 110px); max-width: 1280px; margin: 70px auto 0; }
 .upload-intro { position: sticky; top: 48px; align-self: start; }
 .upload-step { color: #9b8068; font: 10px var(--f-en-mono); letter-spacing: .16em; }
-.upload-intro h1 { margin: 24px 0 20px; color: #5c5549; font: 400 clamp(42px, 5vw, 72px)/1.13 "Songti SC", serif; letter-spacing: -.04em; }
-.upload-intro p { max-width: 340px; color: #8b8376; font: 14px/1.8 "Songti SC", serif; }
+.upload-intro h1 { margin: 24px 0 20px; color: #5c5549; font: 400 clamp(42px, 5vw, 72px)/1.13 var(--f-child); letter-spacing: -.04em; }
+.upload-intro p { max-width: 340px; color: #8b8376; font: 14px/1.8 var(--f-child); }
 .upload-workspace { min-width: 0; }
 .photo-picker { display: grid; place-items: center; min-height: 220px; padding: 32px; border: 1px dashed #aaa08f; border-radius: 4px; background: rgba(255,255,255,.28); text-align: center; cursor: pointer; transition: background .2s, border-color .2s; }
 .photo-picker:hover { border-color: #7f765f; background: rgba(255,255,255,.5); }
 .photo-picker:focus-within { outline: 2px solid #6f7457; outline-offset: 3px; }
 .photo-picker input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
-.picker-mark { color: #81785f; font: 300 42px/1 sans-serif; }
-.photo-picker strong { margin-top: 12px; font: 400 20px "Songti SC", serif; }
+.picker-mark { color: #81785f; font: 300 42px/1 var(--f-child); }
+.photo-picker strong { margin-top: 12px; font: 400 20px var(--f-child); }
 .photo-picker small { margin-top: 8px; color: #9b9385; font: 10px var(--f-en-mono); letter-spacing: .06em; }
 .upload-batch-options { margin: 16px 0 32px; color: #817a6e; font-size: 12px; }
 .upload-batch-options input { accent-color: #73785a; }
@@ -722,7 +719,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .upload-state[data-kind="success"] { color: #667047; }
 .upload-state[data-kind="error"] { color: #a2534d; }
 .upload-fields label { display: grid; gap: 6px; color: #837b6e; font-size: 11px; }
-.upload-fields input[type="text"], .upload-fields input[type="month"] { width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid #bdb4a4; border-radius: 0; padding: 8px 2px; color: #4d493f; background: transparent; font: 14px "Songti SC", serif; }
+.upload-fields input[type="text"], .upload-fields input[type="month"] { width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid #bdb4a4; border-radius: 0; padding: 8px 2px; color: #4d493f; background: transparent; font: 14px var(--f-child); }
 .upload-fields input:focus { outline: 0; border-color: #69704f; }
 .upload-meta-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
 .upload-progress { height: 2px; margin-top: 18px; overflow: hidden; background: #d8d1c5; }
@@ -731,7 +728,7 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .upload-remove { float: right; border: 0; padding: 4px 0; color: #9a716b; background: none; font: 10px var(--f-en-mono); cursor: pointer; }
 .upload-actions { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #c9c1b2; }
 .upload-actions p { margin: 0; color: #827a6c; font-size: 12px; }
-.upload-actions button { border: 1px solid #656a4f; padding: 13px 18px; color: #f5f1e7; background: #656a4f; font: 13px "Songti SC", serif; cursor: pointer; }
+.upload-actions button { border: 1px solid #656a4f; padding: 13px 18px; color: #f5f1e7; background: #656a4f; font: 13px var(--f-child); cursor: pointer; }
 .upload-actions button:disabled { border-color: #bbb3a5; color: #918b80; background: #d5cec1; cursor: not-allowed; }
 
 @media (max-width: 760px) {
@@ -759,11 +756,11 @@ h1 { font-family: Arial, Helvetica, sans-serif; }
 .upload-login-back { color: #877e6e; font: 10px var(--f-en-mono); letter-spacing: .08em; text-decoration: none; }
 .upload-login-kicker { display: block; margin-top: 54px; color: #9b8068; font: 10px var(--f-en-mono); letter-spacing: .16em; }
 .upload-login-mark { margin: 30px 0 16px; color: #858a68; font-size: 28px; }
-.upload-login-card h1 { margin: 0; color: #5c5549; font: 400 38px/1.25 "Songti SC", serif; }
-.upload-login-card > p { margin: 14px 0 32px; color: #8b8376; font: 13px/1.8 "Songti SC", serif; }
+.upload-login-card h1 { margin: 0; color: #5c5549; font: 400 38px/1.25 var(--f-child); }
+.upload-login-card > p { margin: 14px 0 32px; color: #8b8376; font: 13px/1.8 var(--f-child); }
 .upload-login-form label { display: block; color: #837b6e; font-size: 11px; }
 .upload-login-form input { width: 100%; margin-top: 8px; border: 0; border-bottom: 1px solid #a9a08f; border-radius: 0; padding: 11px 2px; color: #4d493f; background: transparent; font: 16px var(--f-en-sans); }
 .upload-login-form input:focus { outline: 0; border-color: #656a4f; box-shadow: 0 1px 0 #656a4f; }
 .upload-login-form input[aria-invalid="true"] { border-color: #a2534d; }
 .upload-login-error { min-height: 1.5em; margin: 9px 0 16px; color: #a2534d; font-size: 11px; }
-.upload-login-form button { width: 100%; border: 1px solid #656a4f; padding: 14px 18px; color: #f5f1e7; background: #656a4f; font: 13px "Songti SC", serif; cursor: pointer; }
+.upload-login-form button { width: 100%; border: 1px solid #656a4f; padding: 14px 18px; color: #f5f1e7; background: #656a4f; font: 13px var(--f-child); cursor: pointer; }

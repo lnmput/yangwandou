@@ -13,7 +13,7 @@ export const Layout = jsxRenderer(({ children }) => {
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Italiana&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Italiana&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&family=Patrick+Hand&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" />
 
         <style>{`
@@ -34,12 +34,14 @@ export const Layout = jsxRenderer(({ children }) => {
             --c-ink: #2a1f3d;
             --c-ink-soft: #4d3d68;
 
-            --f-cn-serif: "Noto Serif SC", "Songti SC", "STSong", serif;
-            --f-cn-hand:  "LXGW WenKai", "Kaiti SC", "STKaiti", serif;
-            --f-en-display: "Italiana", "Cormorant Garamond", serif;
-            --f-en-serif: "Cormorant Garamond", "EB Garamond", Georgia, serif;
-            --f-en-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
-            --f-en-sans: "Inter", -apple-system, system-ui, sans-serif;
+            --f-child: Patrick Hand, ZCOOL KuaiLe, LXGW WenKai, Kaiti SC, STKaiti, cursive;
+            --f-cn-serif: var(--f-child);
+            --f-cn-hand: var(--f-child);
+            --f-en-hand: var(--f-child);
+            --f-en-display: var(--f-child);
+            --f-en-serif: var(--f-child);
+            --f-en-mono: var(--f-child);
+            --f-en-sans: var(--f-child);
           }
 
           html, body {
@@ -53,6 +55,7 @@ export const Layout = jsxRenderer(({ children }) => {
             min-height: 100vh;
           }
           * { box-sizing: border-box; }
+          button, input, textarea, select { font-family: inherit; }
 
           .photo-slot {
             position: relative;

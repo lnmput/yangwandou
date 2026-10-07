@@ -120,7 +120,11 @@ export const Artbook = ({ artbook }: { artbook: ArtbookData }) => {
               <div class="page-status"><span id="current-spread">封面</span><i /> <span>{String(artworkSpreadCount).padStart(2, '0')}</span></div>
               <button type="button" class="book-control" id="next-page" aria-label="下一页">→</button>
             </div>
-            <p class="artbook-keyhint"><span class="desktop-hint">点击页面翻页 · </span><button type="button" id="close-book">回到封面</button></p>
+            <p class="artbook-keyhint">
+              <span class="desktop-hint">点击页面翻页 · </span>
+              {artbook.artworks.length > 0 && <><button type="button" id="last-artwork">最后一张画</button><span> · </span></>}
+              <button type="button" id="close-book">回到封面</button>
+            </p>
           </section>
         </div>
       </div>
@@ -272,7 +276,9 @@ export const Artbook = ({ artbook }: { artbook: ArtbookData }) => {
           const previous = document.getElementById('prev-page');
           const next = document.getElementById('next-page');
           const close = document.getElementById('close-book');
+          const lastArtwork = document.getElementById('last-artwork');
           const artworkSpreadCount = ${artworkSpreadCount};
+          const lastArtworkPage = ${artbook.artworks.length + 2};
           let closingToCover = false;
 
           const pageFlip = new window.St.PageFlip(root, {
@@ -350,6 +356,7 @@ export const Artbook = ({ artbook }: { artbook: ArtbookData }) => {
 
           if (previous) previous.addEventListener('click', () => pageFlip.flipPrev('top'));
           if (next) next.addEventListener('click', () => pageFlip.flipNext('top'));
+          if (lastArtwork) lastArtwork.addEventListener('click', () => pageFlip.flip(lastArtworkPage, 'top'));
           if (close) {
             close.addEventListener('click', () => {
               closingToCover = true;

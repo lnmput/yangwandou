@@ -163,8 +163,11 @@ app.get('/artbook/upload/api/order', async (c) => {
   return c.json({ artworks: objects.map((object) => ({
     key: object.key,
     url: toMediaUrl(object.key),
-    title: entries.get(object.key)?.title || object.customMetadata?.title || object.key.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/^\d+(?:__|[-_. ])?/, '') || '未命名画作',
+    title: entries.get(object.key)?.title !== undefined
+      ? (entries.get(object.key)?.title || '未命名画作')
+      : (object.customMetadata?.title || object.key.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/^\d+(?:__|[-_. ])?/, '') || '未命名画作'),
     date: entries.get(object.key)?.date || object.customMetadata?.date || '',
+    age: entries.get(object.key)?.age || object.customMetadata?.age || '',
   })) })
 })
 
@@ -183,6 +186,43 @@ app.post('/artbook/upload/api/order', async (c) => {
     ...manifest,
     artworks: keys.map((key: string) => ({ ...entries.get(key), file: key.slice(ARTBOOK_PREFIX.length) })),
   }, null, 2), { httpMetadata: { contentType: 'application/json; charset=utf-8' } })
+  return c.json({ ok: true })
+})
+
+app.patch('/artbook/upload/api/images', async (c) => {
+  const bucket = c.env.ARTBOOK_BUCKET
+  if (!bucket) return c.json({ error: 'R2 bucket binding is unavailable.' }, 503)
+  let body: any
+  try { body = await c.req.json() } catch { return c.json({ error: '作品信息无效。' }, 400) }
+  const { manifest, objects } = await getOrderedArtworkObjects(bucket)
+  const object = objects.find((entry) => entry.key === body.key)
+  if (!object) return c.json({ error: '作品不存在，请刷新列表。' }, 404)
+  if (typeof body.title !== 'string' || typeof body.date !== 'string' || typeof body.age !== 'string') return c.json({ error: '作品信息无效。' }, 400)
+  const title = body.title.trim().slice(0, 60)
+  const date = body.date.trim()
+  const age = body.age.trim().slice(0, 12)
+  if (date && !/^\d{4}\.\d{2}$/.test(date)) return c.json({ error: '创作月份格式无效。' }, 400)
+  const entries = new Map((manifest.artworks ?? []).map((item) => [item.file.startsWith(ARTBOOK_PREFIX) ? item.file : `${ARTBOOK_PREFIX}${item.file}`, item]))
+  const artworks = objects.map((entry) => {
+    const previous = entries.get(entry.key)
+    return entry.key === object.key
+      ? { ...previous, file: entry.key.slice(ARTBOOK_PREFIX.length), title, date, age }
+      : { ...previous, file: entry.key.slice(ARTBOOK_PREFIX.length) }
+  })
+  await bucket.put(`${ARTBOOK_PREFIX}manifest.json`, JSON.stringify({ ...manifest, artworks }, null, 2), { httpMetadata: { contentType: 'application/json; charset=utf-8' } })
+  return c.json({ ok: true })
+})
+
+app.delete('/artbook/upload/api/images', async (c) => {
+  const bucket = c.env.ARTBOOK_BUCKET
+  if (!bucket) return c.json({ error: 'R2 bucket binding is unavailable.' }, 503)
+  let key: unknown
+  try { key = (await c.req.json()).key } catch { return c.json({ error: '作品信息无效。' }, 400) }
+  const { manifest, objects } = await getOrderedArtworkObjects(bucket)
+  if (typeof key !== 'string' || !objects.some((object) => object.key === key)) return c.json({ error: '作品不存在，请刷新列表。' }, 404)
+  await bucket.delete(key)
+  const artworks = manifest.artworks?.filter((item) => (item.file.startsWith(ARTBOOK_PREFIX) ? item.file : `${ARTBOOK_PREFIX}${item.file}`) !== key)
+  if (artworks) await bucket.put(`${ARTBOOK_PREFIX}manifest.json`, JSON.stringify({ ...manifest, artworks }, null, 2), { httpMetadata: { contentType: 'application/json; charset=utf-8' } })
   return c.json({ ok: true })
 })
 

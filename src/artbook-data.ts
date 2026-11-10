@@ -41,6 +41,7 @@ export type R2BucketBinding = {
     httpMetadata?: R2HttpMetadata
     customMetadata?: Record<string, string>
   }) => Promise<R2ObjectInfo>
+  delete: (key: string) => Promise<void>
   list: (options?: {
     prefix?: string
     cursor?: string
@@ -216,12 +217,12 @@ export const loadArtbook = async (bucket?: R2BucketBinding): Promise<ArtbookData
 
     return {
       no,
-      date: filenameMetadata.formatted ? (item?.date ?? metadata.date ?? filenameMetadata.date) : '',
-      age: filenameMetadata.formatted ? (item?.age ?? metadata.age ?? filenameMetadata.age) : '',
-      title: filenameMetadata.formatted ? (item?.title ?? metadata.title ?? filenameMetadata.title) : `画作 ${no}`,
+      date: item?.date ?? metadata.date ?? (filenameMetadata.formatted ? filenameMetadata.date : ''),
+      age: item?.age ?? metadata.age ?? (filenameMetadata.formatted ? filenameMetadata.age : ''),
+      title: item?.title !== undefined ? (item.title || '未命名画作') : (metadata.title || (filenameMetadata.formatted ? filenameMetadata.title : `画作 ${no}`)),
       src: toMediaUrl(object.key),
       tone: tones[index % tones.length],
-      showCaption: filenameMetadata.formatted,
+      showCaption: filenameMetadata.formatted || Boolean(item?.title || metadata.title),
     }
   })
 

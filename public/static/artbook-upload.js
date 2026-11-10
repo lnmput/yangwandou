@@ -245,6 +245,7 @@
       empty.className = 'order-empty'
       empty.textContent = '画册里还没有作品。上传照片后，就会出现在这里。'
       orderGrid.append(empty)
+      updateOrderState()
       return
     }
     orderedArtworks.forEach((art, index) => {
@@ -260,11 +261,88 @@
       img.loading = 'lazy'
       frame.append(img)
       const title = document.createElement('h3')
-      title.textContent = art.title
+      const titleButton = document.createElement('button')
+      titleButton.type = 'button'
+      titleButton.className = 'order-title-button'
+      titleButton.textContent = art.title || '未命名画作'
+      titleButton.title = '点击编辑作品信息'
+      titleButton.setAttribute('aria-label', `编辑${art.title || '未命名画作'}的信息`)
+      title.append(titleButton)
       const meta = document.createElement('p')
       meta.textContent = `№ ${String(index + 1).padStart(2, '0')}${art.date ? ` · ${art.date}` : ''}`
       const controls = document.createElement('div')
       controls.className = 'order-controls'
+      const editor = document.createElement('form')
+      editor.className = 'order-editor'
+      editor.hidden = true
+      const field = (labelText, className, value, type = 'text') => {
+        const label = document.createElement('label')
+        label.textContent = labelText
+        const input = document.createElement('input')
+        input.className = className
+        input.type = type
+        input.value = value || ''
+        label.append(input)
+        editor.append(label)
+        return input
+      }
+      const titleInput = field('作品名称', 'order-edit-title', art.title === '未命名画作' ? '' : art.title)
+      titleInput.maxLength = 60
+      const dateInput = field('创作月份', 'order-edit-date', art.date ? art.date.replace('.', '-') : '', 'month')
+      const ageInput = field('当时年龄', 'order-edit-age', art.age)
+      ageInput.maxLength = 12
+      const editorActions = document.createElement('div')
+      editorActions.className = 'order-editor-actions'
+      const saveEdit = document.createElement('button')
+      saveEdit.type = 'submit'
+      saveEdit.textContent = '保存信息'
+      const cancelEdit = document.createElement('button')
+      cancelEdit.type = 'button'
+      cancelEdit.textContent = '取消'
+      cancelEdit.addEventListener('click', () => { editor.hidden = true; titleButton.focus() })
+      const deleteArt = document.createElement('button')
+      deleteArt.type = 'button'
+      deleteArt.className = 'order-delete'
+      deleteArt.textContent = '删除作品'
+      editorActions.append(saveEdit, cancelEdit, deleteArt)
+      editor.append(editorActions)
+      const editorMessage = document.createElement('p')
+      editorMessage.className = 'order-editor-message'
+      editorMessage.setAttribute('role', 'alert')
+      editor.append(editorMessage)
+      titleButton.addEventListener('click', () => { editor.hidden = !editor.hidden; if (!editor.hidden) titleInput.focus() })
+      editor.addEventListener('submit', async (event) => {
+        event.preventDefault()
+        const nextTitle = titleInput.value.trim()
+        const nextDate = dateInput.value ? dateInput.value.replace('-', '.') : ''
+        const nextAge = ageInput.value.trim()
+        saveEdit.disabled = true
+        editorMessage.textContent = '正在保存…'
+        try {
+          const response = await fetch('/artbook/upload/api/images', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: art.key, title: nextTitle, date: nextDate, age: nextAge }) })
+          const data = await response.json()
+          if (!response.ok) throw new Error(data.error || '保存失败。')
+          art.title = nextTitle || '未命名画作'
+          art.date = nextDate
+          art.age = nextAge
+          renderOrder()
+          orderMessage.textContent = '作品信息已保存'
+        } catch (error) { editorMessage.textContent = error.message || '保存失败。'; saveEdit.disabled = false }
+      })
+      deleteArt.addEventListener('click', async () => {
+        if (!window.confirm(`确定永久删除“${art.title || '未命名画作'}”吗？此操作无法撤销。`)) return
+        deleteArt.disabled = true
+        editorMessage.textContent = '正在删除…'
+        try {
+          const response = await fetch('/artbook/upload/api/images', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: art.key }) })
+          const data = await response.json()
+          if (!response.ok) throw new Error(data.error || '删除失败。')
+          orderedArtworks = orderedArtworks.filter((entry) => entry.key !== art.key)
+          savedKeys = savedKeys.filter((key) => key !== art.key)
+          renderOrder()
+          orderMessage.textContent = '作品已删除'
+        } catch (error) { editorMessage.textContent = error.message || '删除失败。'; deleteArt.disabled = false }
+      })
       const moveTo = (target, focusLabel) => {
         orderedArtworks.splice(index, 1)
         orderedArtworks.splice(target, 0, art)
@@ -301,7 +379,7 @@
         controls.append(button)
       }
       controls.append(lastButton)
-      card.append(frame, title, meta, controls)
+      card.append(frame, title, meta, controls, editor)
       card.addEventListener('dragstart', (event) => { draggedKey = art.key; event.dataTransfer.effectAllowed = 'move'; card.classList.add('is-dragging') })
       card.addEventListener('dragend', () => { draggedKey = null; card.classList.remove('is-dragging') })
       card.addEventListener('dragover', (event) => { event.preventDefault(); card.classList.add('is-drop-target') })

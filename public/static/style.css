@@ -727,6 +727,7 @@ h1 { font-family: var(--f-child); }
 .order-card h3 { margin: 14px 0 2px; overflow: hidden; font: 400 clamp(18px, 2vw, 30px)/1.2 'Courier New', monospace; text-overflow: ellipsis; white-space: nowrap; }
 .order-card p { margin: 0; color: #5d5c54; font: 13px/1.4 'Courier New', monospace; }
 .order-controls { display: flex; gap: 5px; margin-top: 10px; }
+.order-controls button { flex: 1; min-width: 0; }
 .order-controls button { width: 33px; height: 30px; border: 1px solid #aaa99d; color: #24241f; background: #f8f7ee; cursor: pointer; }
 .order-controls button:disabled { opacity: .35; cursor: default; }
 .order-empty { grid-column: 1 / -1; min-height: 160px; font: 18px 'Courier New', monospace; }

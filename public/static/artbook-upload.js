@@ -265,6 +265,29 @@
       meta.textContent = `№ ${String(index + 1).padStart(2, '0')}${art.date ? ` · ${art.date}` : ''}`
       const controls = document.createElement('div')
       controls.className = 'order-controls'
+      const moveTo = (target, focusLabel) => {
+        orderedArtworks.splice(index, 1)
+        orderedArtworks.splice(target, 0, art)
+        renderOrder()
+        const movedCard = [...orderGrid.querySelectorAll('.order-card')].find((entry) => entry.dataset.key === art.key)
+        movedCard?.querySelector(`[data-action="${focusLabel}"]`)?.focus()
+      }
+      let lastButton
+      for (const [label, target, symbol, action] of [
+        ['移到最前', 0, '⇤', 'first'],
+        ['移到最后', orderedArtworks.length - 1, '⇥', 'last'],
+      ]) {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.textContent = symbol
+        button.title = label
+        button.dataset.action = action
+        button.setAttribute('aria-label', `${art.title}${label}`)
+        button.disabled = index === target
+        button.addEventListener('click', () => moveTo(target, action))
+        if (action === 'last') lastButton = button
+        else controls.append(button)
+      }
       for (const [label, delta, symbol] of [['向前移动', -1, '←'], ['向后移动', 1, '→']]) {
         const button = document.createElement('button')
         button.type = 'button'
@@ -272,13 +295,12 @@
         button.setAttribute('aria-label', `${art.title}${label}`)
         button.disabled = index + delta < 0 || index + delta >= orderedArtworks.length
         button.addEventListener('click', () => {
-          orderedArtworks.splice(index, 1)
-          orderedArtworks.splice(index + delta, 0, art)
-          renderOrder()
-          orderGrid.querySelectorAll('.order-card')[index + delta]?.querySelector(delta < 0 ? '.order-controls button:first-child' : '.order-controls button:last-child')?.focus()
+          moveTo(index + delta, delta < 0 ? 'previous' : 'next')
         })
+        button.dataset.action = delta < 0 ? 'previous' : 'next'
         controls.append(button)
       }
+      controls.append(lastButton)
       card.append(frame, title, meta, controls)
       card.addEventListener('dragstart', (event) => { draggedKey = art.key; event.dataTransfer.effectAllowed = 'move'; card.classList.add('is-dragging') })
       card.addEventListener('dragend', () => { draggedKey = null; card.classList.remove('is-dragging') })

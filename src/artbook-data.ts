@@ -52,14 +52,14 @@ export type R2BucketBinding = {
   }>
 }
 
-type ManifestArtwork = {
+export type ManifestArtwork = {
   file: string
   title?: string
   date?: string
   age?: string
 }
 
-type ArtbookManifest = {
+export type ArtbookManifest = {
   title?: string
   years?: string
   description?: string
@@ -123,7 +123,7 @@ const metadataFromFilename = (key: string) => {
   return { formatted: false, date: '', age: '', title: titleFromFilename(key) }
 }
 
-const readManifest = async (bucket: R2BucketBinding): Promise<ArtbookManifest> => {
+export const readManifest = async (bucket: R2BucketBinding): Promise<ArtbookManifest> => {
   try {
     const object = await bucket.get(`${ARTBOOK_PREFIX}manifest.json`)
     if (!object?.text) return {}
@@ -133,7 +133,7 @@ const readManifest = async (bucket: R2BucketBinding): Promise<ArtbookManifest> =
   }
 }
 
-const listImages = async (bucket: R2BucketBinding) => {
+export const listImages = async (bucket: R2BucketBinding) => {
   const objects: R2ObjectInfo[] = []
   let cursor: string | undefined
 
@@ -148,6 +148,22 @@ const listImages = async (bucket: R2BucketBinding) => {
   } while (cursor)
 
   return objects.sort((a, b) => a.key.localeCompare(b.key, 'zh-CN', { numeric: true }))
+}
+
+export const getOrderedArtworkObjects = async (bucket: R2BucketBinding) => {
+  const [manifest, images] = await Promise.all([readManifest(bucket), listImages(bucket)])
+  const coverKey = manifest.cover ? toObjectKey(manifest.cover) : undefined
+  const cover = images.find((object) => object.key === coverKey)
+    || images.find((object) => object.customMetadata?.role === 'cover')
+    || images.find((object) => /^cover(?:[._-]|$)/i.test(object.key.split('/').pop() ?? ''))
+  const available = images.filter((object) => object.key !== cover?.key)
+  const byKey = new Map(available.map((object) => [object.key, object]))
+  const ordered: R2ObjectInfo[] = []
+  for (const item of manifest.artworks ?? []) {
+    const object = byKey.get(toObjectKey(item.file))
+    if (object) { ordered.push(object); byKey.delete(object.key) }
+  }
+  return { manifest, objects: [...ordered, ...byKey.values()] }
 }
 
 export const getNextArtworkNumber = async (bucket: R2BucketBinding) => {
@@ -180,10 +196,15 @@ export const loadArtbook = async (bucket?: R2BucketBinding): Promise<ArtbookData
     || images.find((object) => object.customMetadata?.role === 'cover')
     || images.find((object) => /^cover(?:[._-]|$)/i.test(object.key.split('/').pop() ?? ''))
 
+  const usedKeys = new Set<string>()
   const orderedImages = manifest.artworks?.length
-    ? manifest.artworks
+    ? [...manifest.artworks
       .map((item) => ({ item, object: imageMap.get(toObjectKey(item.file)) }))
-      .filter((entry): entry is { item: ManifestArtwork, object: R2ObjectInfo } => Boolean(entry.object))
+      .filter((entry): entry is { item: ManifestArtwork, object: R2ObjectInfo } => {
+        if (!entry.object || entry.object.key === cover?.key || usedKeys.has(entry.object.key)) return false
+        usedKeys.add(entry.object.key)
+        return true
+      }), ...images.filter((object) => object.key !== cover?.key && !usedKeys.has(object.key)).map((object) => ({ item: undefined, object }))]
     : images
       .filter((object) => object.key !== cover?.key)
       .map((object) => ({ item: undefined, object }))

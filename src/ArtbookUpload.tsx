@@ -40,6 +40,14 @@ export const ArtbookUpload = () => (
       </div>
     </section>
 
+    <section class="order-sheet" aria-labelledby="order-heading">
+      <div class="order-heading-row">
+        <div><span class="order-eyebrow">ARTBOOK / COLLECTION</span><h2 id="order-heading">画作列表</h2><p>拖动照片调整画册顺序，也可以使用每张照片下方的箭头。</p></div>
+        <div class="order-save-wrap"><span id="order-message" role="status" /><button id="order-save" type="button" disabled>保存顺序</button></div>
+      </div>
+      <div id="order-grid" class="order-grid" aria-live="polite"><p class="order-empty">正在读取画作…</p></div>
+    </section>
+
     <template id="upload-item-template">
       <article class="upload-item">
         <div class="upload-preview">

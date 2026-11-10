@@ -9,7 +9,7 @@ import { getAgeInfo } from './age'
 import { Artbook } from './Artbook'
 import { ArtbookUpload } from './ArtbookUpload'
 import { ArtbookLogin } from './ArtbookLogin'
-import { ARTBOOK_PREFIX, CloudflareBindings, getNextArtworkNumber, loadArtbook } from './artbook-data'
+import { ARTBOOK_PREFIX, CloudflareBindings, getNextArtworkNumber, getOrderedArtworkObjects, loadArtbook, toMediaUrl } from './artbook-data'
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 
@@ -153,6 +153,37 @@ app.get('/artbook/upload/api/status', async (c) => {
   const bucket = c.env.ARTBOOK_BUCKET
   if (!bucket) return c.json({ error: 'R2 bucket binding is unavailable.' }, 503)
   return c.json({ nextNumber: await getNextArtworkNumber(bucket) })
+})
+
+app.get('/artbook/upload/api/order', async (c) => {
+  const bucket = c.env.ARTBOOK_BUCKET
+  if (!bucket) return c.json({ error: 'R2 bucket binding is unavailable.' }, 503)
+  const { manifest, objects } = await getOrderedArtworkObjects(bucket)
+  const entries = new Map((manifest.artworks ?? []).map((item) => [item.file.startsWith(ARTBOOK_PREFIX) ? item.file : `${ARTBOOK_PREFIX}${item.file}`, item]))
+  return c.json({ artworks: objects.map((object) => ({
+    key: object.key,
+    url: toMediaUrl(object.key),
+    title: entries.get(object.key)?.title || object.customMetadata?.title || object.key.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/^\d+(?:__|[-_. ])?/, '') || '未命名画作',
+    date: entries.get(object.key)?.date || object.customMetadata?.date || '',
+  })) })
+})
+
+app.post('/artbook/upload/api/order', async (c) => {
+  const bucket = c.env.ARTBOOK_BUCKET
+  if (!bucket) return c.json({ error: 'R2 bucket binding is unavailable.' }, 503)
+  let keys: unknown
+  try { keys = (await c.req.json()).keys } catch { return c.json({ error: '排序数据无效。' }, 400) }
+  const { manifest, objects } = await getOrderedArtworkObjects(bucket)
+  const current = new Set(objects.map((object) => object.key))
+  if (!Array.isArray(keys) || keys.length !== current.size || new Set(keys).size !== current.size || !keys.every((key) => typeof key === 'string' && current.has(key))) {
+    return c.json({ error: '作品列表已变化，请刷新后重新排序。' }, 409)
+  }
+  const entries = new Map((manifest.artworks ?? []).map((item) => [item.file.startsWith(ARTBOOK_PREFIX) ? item.file : `${ARTBOOK_PREFIX}${item.file}`, item]))
+  await bucket.put(`${ARTBOOK_PREFIX}manifest.json`, JSON.stringify({
+    ...manifest,
+    artworks: keys.map((key: string) => ({ ...entries.get(key), file: key.slice(ARTBOOK_PREFIX.length) })),
+  }, null, 2), { httpMetadata: { contentType: 'application/json; charset=utf-8' } })
+  return c.json({ ok: true })
 })
 
 const uploadContentTypes: Record<string, string> = {

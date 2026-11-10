@@ -221,8 +221,112 @@
     }
     uploading = false
     updateSummary()
+    await loadOrder(true)
   })
 
   window.addEventListener('beforeunload', () => items.forEach((item) => URL.revokeObjectURL(item.previewUrl)))
   updateSummary()
+
+  const orderGrid = document.querySelector('#order-grid')
+  const orderSave = document.querySelector('#order-save')
+  const orderMessage = document.querySelector('#order-message')
+  let orderedArtworks = []
+  let savedKeys = []
+  let draggedKey = null
+
+  const updateOrderState = () => {
+    orderSave.disabled = orderedArtworks.map((art) => art.key).join('\n') === savedKeys.join('\n')
+    if (!orderSave.disabled) orderMessage.textContent = '顺序尚未保存'
+  }
+  const renderOrder = () => {
+    orderGrid.replaceChildren()
+    if (!orderedArtworks.length) {
+      const empty = document.createElement('p')
+      empty.className = 'order-empty'
+      empty.textContent = '画册里还没有作品。上传照片后，就会出现在这里。'
+      orderGrid.append(empty)
+      return
+    }
+    orderedArtworks.forEach((art, index) => {
+      const card = document.createElement('article')
+      card.className = 'order-card'
+      card.draggable = true
+      card.dataset.key = art.key
+      const frame = document.createElement('div')
+      frame.className = 'order-photo-frame'
+      const img = document.createElement('img')
+      img.src = art.url
+      img.alt = art.title
+      img.loading = 'lazy'
+      frame.append(img)
+      const title = document.createElement('h3')
+      title.textContent = art.title
+      const meta = document.createElement('p')
+      meta.textContent = `№ ${String(index + 1).padStart(2, '0')}${art.date ? ` · ${art.date}` : ''}`
+      const controls = document.createElement('div')
+      controls.className = 'order-controls'
+      for (const [label, delta, symbol] of [['向前移动', -1, '←'], ['向后移动', 1, '→']]) {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.textContent = symbol
+        button.setAttribute('aria-label', `${art.title}${label}`)
+        button.disabled = index + delta < 0 || index + delta >= orderedArtworks.length
+        button.addEventListener('click', () => {
+          orderedArtworks.splice(index, 1)
+          orderedArtworks.splice(index + delta, 0, art)
+          renderOrder()
+          orderGrid.querySelectorAll('.order-card')[index + delta]?.querySelector(delta < 0 ? '.order-controls button:first-child' : '.order-controls button:last-child')?.focus()
+        })
+        controls.append(button)
+      }
+      card.append(frame, title, meta, controls)
+      card.addEventListener('dragstart', (event) => { draggedKey = art.key; event.dataTransfer.effectAllowed = 'move'; card.classList.add('is-dragging') })
+      card.addEventListener('dragend', () => { draggedKey = null; card.classList.remove('is-dragging') })
+      card.addEventListener('dragover', (event) => { event.preventDefault(); card.classList.add('is-drop-target') })
+      card.addEventListener('dragleave', () => card.classList.remove('is-drop-target'))
+      card.addEventListener('drop', (event) => {
+        event.preventDefault()
+        card.classList.remove('is-drop-target')
+        if (!draggedKey || draggedKey === art.key) return
+        const from = orderedArtworks.findIndex((entry) => entry.key === draggedKey)
+        const to = orderedArtworks.findIndex((entry) => entry.key === art.key)
+        orderedArtworks.splice(to, 0, orderedArtworks.splice(from, 1)[0])
+        renderOrder()
+      })
+      orderGrid.append(card)
+    })
+    updateOrderState()
+  }
+  const loadOrder = async (preserveChanges = false) => {
+    try {
+      const response = await fetch('/artbook/upload/api/order')
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || '读取画作失败。')
+      const previous = preserveChanges && !orderSave.disabled ? orderedArtworks : []
+      const fresh = new Map(data.artworks.map((art) => [art.key, art]))
+      orderedArtworks = previous.length
+        ? [...previous.filter((art) => fresh.has(art.key)).map((art) => fresh.get(art.key)), ...data.artworks.filter((art) => !previous.some((old) => old.key === art.key))]
+        : data.artworks
+      savedKeys = data.artworks.map((art) => art.key)
+      orderMessage.textContent = ''
+      renderOrder()
+    } catch (error) {
+      orderGrid.textContent = error.message || '读取画作失败。'
+    }
+  }
+  orderSave.addEventListener('click', async () => {
+    orderSave.disabled = true
+    orderMessage.textContent = '正在保存…'
+    try {
+      const response = await fetch('/artbook/upload/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keys: orderedArtworks.map((art) => art.key) }) })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || '保存失败。')
+      savedKeys = orderedArtworks.map((art) => art.key)
+      orderMessage.textContent = '顺序已保存，刷新画册即可查看'
+    } catch (error) {
+      orderMessage.textContent = error.message || '保存失败，请重试。'
+      updateOrderState()
+    }
+  })
+  loadOrder()
 })()
